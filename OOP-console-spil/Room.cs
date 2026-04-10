@@ -21,6 +21,8 @@ namespace OOP_console_spil
 
         public List<Item> Items { get; set; } = new List<Item>();
 
+        public Monster Monster { get; set; }
+
         public Room(string description) 
         {
             Description = description;

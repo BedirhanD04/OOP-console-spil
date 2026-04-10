@@ -3,42 +3,93 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace OOP_console_spil
 {
-    public class Program
+     class Program
     {
         static void Main(string[] args)
         {
-            Room room1 = new Room("You are in a dark cave.");
-            Room room2 = new Room("You are in a forest.");
 
-            room1.North = room2;
-            room2.South = room1;
+            Room north = new Room("Velkommen til Cyclones verden! Du befinder dig i øjeblikket i den nordlige skov.\nFor at undslippe skal du dræbe 3 forskellige monstre. Held og lykke! :)");
 
+            Room west = new Room("Hejjj, velkommen til den vestlige skov!");
+            Room east = new Room("Hejjj, velkommen til den eastlige skov!");
+            Room south = new Room("Hejj, velkommen til den sydlig  skov!");
             Player player = new Player();
-            player.CurrentRoom = room1;
+
+            player.CurrentRoom = north;
+            player.StartRoom = north;
+
+            north.West = west;
+            north.East = east;
+            north.South = south;
+
+            west.East = north;
+            east.West = north;
+            south.North = north;
+
+            west.Monster = new Monster("Skyress", 40, 8);
+            east.Monster = new Monster("preass", 70, 12);
+            south.Monster = new Monster("The Dragonaid (Drago)", 100, 18);
+
+            Weapon sword = new Weapon("sword", 20, false, 999);
+            player.inventory.Add(sword);
+
+            
 
             Console.WriteLine(player.CurrentRoom.Description);
 
             while (true)
             {
+                
+                Console.WriteLine($"Health: {player.Health}");
+                
                 Console.Write("> ");
                 string input = Console.ReadLine().ToLower();
+                player.ShowMap();
 
                 if (input.StartsWith("go "))
                 {
+                    Console.Clear();
                     string direction = input.Split(' ')[1];
                     player.Move(direction);
                 }
                 else if (input == "inventory")
                 {
+                    Console.Clear();
                     player.ShowInventory();
+                    player.ShowMap();
                 }
+               
+                else if (input.StartsWith("attack "))
+                {
+                    Console.Clear();
+                    string weaponName = input.Substring(7);
+                    var weapon = player.inventory.OfType<Weapon>().FirstOrDefault(w => w.Name.ToLower() == weaponName);
+
+                    if (weapon != null && weapon.Hit())
+                    {
+                        Console.WriteLine($"You attack with {weapon.Name}");
+                    }
+                }
+
+                else if (input == "map")
+                {
+                    Console.Clear();
+                    player.ShowMap();
+                }
+
             }
 
 
 
         }
+
+       
+
     }
+
+    
 }
