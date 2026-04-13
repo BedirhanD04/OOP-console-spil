@@ -30,25 +30,31 @@ namespace OOP_console_spil
             east.West = north;
             south.North = north;
 
-            west.Monster = new Monster("Skyress", 40, 8);
-            east.Monster = new Monster("preass", 70, 12);
-            south.Monster = new Monster("The Dragonaid (Drago)", 100, 18);
+            west.Monster = new Skyress();
+            east.Monster = new Preass();
+            south.Monster = new Drago();
 
-            Weapon sword = new Weapon("sword", 20, false, 999);
+            Weapon sword = new Weapon("Sword", 20, false, 999);
             player.inventory.Add(sword);
+            Potion potion = new Potion("Health Potion", 30);
+            player.inventory.Add(potion);
 
-            
 
             Console.WriteLine(player.CurrentRoom.Description);
 
             while (true)
             {
-                
+                Console.WriteLine("------------------------------------------------------------------------------------------------------------------------");
+                Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine($"Health: {player.Health}");
-                
+                Console.ResetColor();
+                Console.WriteLine("Commands: [Go west], [Go, East], [Go South], [Go north],\n[Inventory], [Attack], [drink potion], [Map]");
+
+
                 Console.Write("> ");
                 string input = Console.ReadLine().ToLower();
                 player.ShowMap();
+                   
 
                 if (input.StartsWith("go "))
                 {
@@ -60,7 +66,6 @@ namespace OOP_console_spil
                 {
                     Console.Clear();
                     player.ShowInventory();
-                    player.ShowMap();
                 }
                
                 else if (input.StartsWith("attack "))
@@ -79,6 +84,24 @@ namespace OOP_console_spil
                 {
                     Console.Clear();
                     player.ShowMap();
+                         
+
+                }
+
+
+                else if (input == "drink potion")
+                {
+                    var foundPotion = player.inventory.OfType<Potion>().FirstOrDefault();
+
+                    if (potion != null)
+                    {
+                        potion.Drink(player);
+                        player.inventory.Remove(foundPotion);
+                    }
+                    else
+                    {
+                        Console.WriteLine("Du har ikke potion");
+                    }
                 }
 
             }

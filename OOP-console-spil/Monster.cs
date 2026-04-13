@@ -12,6 +12,9 @@ namespace OOP_console_spil
         public int Health { get; set; }
         public int Damage { get; set; }
 
+        private Random rand = new Random(); 
+
+
         public Monster(string name, int health, int damage)
         {
            Name = name;
@@ -23,8 +26,24 @@ namespace OOP_console_spil
 
         public void Attack(Player player)
         {
-            player.Health -= Damage;
-            Console.WriteLine($"{Name} hits you for {Damage} damage!");
+            int chance = rand.Next(100);
+
+            if(chance < 30)
+            {
+                SpecialAttack(player);
+            } 
+
+            else
+            {
+                player.Health -= Damage;
+                Console.WriteLine($"{Name} rammer dig med {Damage} skader!");
+            }
+
+        }
+
+        public  virtual void SpecialAttack(Player player)
+        {
+            Console.WriteLine($"{Name} prøvede et specialangreb, men mislykkedes!");
         }
 
 

@@ -60,7 +60,7 @@ namespace OOP_console_spil
         {
             foreach(var item in inventory)
             {
-                Console.WriteLine(item.Name);
+                Console.WriteLine("- " + item.Name);
             }
         }
 
@@ -85,7 +85,8 @@ namespace OOP_console_spil
                     {
                         Console.WriteLine("- " + w.Name);
                     }
-               string weaponChoise = Console.ReadLine().ToLower();  
+
+                    string weaponChoise = Console.ReadLine().ToLower();  
 
                     var weapon = inventory.OfType<Weapon>().FirstOrDefault(w => w.Name.ToLower() == weaponChoise);  
 
@@ -106,6 +107,7 @@ namespace OOP_console_spil
 
                 else if(input == "run")
                 {
+                    Console.Clear();
                     Console.WriteLine("Du slap ud!");
                     return;
                 }
@@ -160,7 +162,7 @@ namespace OOP_console_spil
             }
             else if (BossesKilled == 2)
             {
-                var axe = new Weapon("Axe", 35, false, 20);
+                var axe = new Weapon("Axe", 35, false, 999);
                 inventory.Add(axe);
                 Console.WriteLine("Du har modtaget en økse!");
             }
@@ -187,7 +189,7 @@ namespace OOP_console_spil
             Console.WriteLine($"   {west}       {east}");
             Console.WriteLine($"        {south}");
 
-            Console.WriteLine("============\n");
+            Console.WriteLine("=================\n");
         }
 
 
