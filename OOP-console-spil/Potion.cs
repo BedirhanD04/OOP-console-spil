@@ -17,7 +17,7 @@ namespace OOP_console_spil
 
         public void Drink(Player player)
         {
-            player.Health = Math.Min(player.Health + HealAmount, 100);
+            player.Health = Math.Min(player.Health + HealAmount, player.MaxHealth);
             Console.WriteLine($"You drank {Name} and healed {HealAmount} HP!");
         }
     }

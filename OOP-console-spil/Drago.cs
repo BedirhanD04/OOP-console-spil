@@ -11,11 +11,11 @@ namespace OOP_console_spil
         public Drago() : base("Drago", 100, 18) { }
         public override void SpecialAttack(Player player)
         {
-            int dmg = Damage + 15;
-            player.Health -= dmg;
+            int damage2 = Damage + 15;
+            player.Health -= damage2;
 
             Console.WriteLine("Drago uses BURNING DRAGON!");
-            Console.WriteLine($"You take {dmg} damage!");
+            Console.WriteLine($"You take {damage2} damage!");
         }
     }
 }

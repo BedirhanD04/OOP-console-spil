@@ -5,6 +5,7 @@ using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Schema;
 
 namespace OOP_console_spil
 {
@@ -17,8 +18,11 @@ namespace OOP_console_spil
         public int Health { get; set; } = 100;
 
         public int BossesKilled { get; set; } = 0;
+
+        public int MaxHealth { get; set; } = 100; 
         public List<Item> inventory { get; set; } = new List<Item>();
 
+        //------------------------------------------------------------------------------------------------------------------------------------
         public void Move(string direction)
         {
             Room nextRoom = null;
@@ -40,7 +44,7 @@ namespace OOP_console_spil
             
             if (nextRoom == CurrentRoom.South && BossesKilled < 2)
             {
-                Console.WriteLine("\"Du skal først besejre VEST- og ØST-bosserne!\"");
+                Console.WriteLine("Du skal først besejre VEST- og ØST-bosserne!");
                 return;
             }
 
@@ -55,22 +59,24 @@ namespace OOP_console_spil
                 CurrentRoom.Monster = null;
             }
         }
-
+        //----------------------------------------------------------------------------------------------------------------------------------------------
         public void ShowInventory()
         {
             foreach(var item in inventory)
             {
-                Console.WriteLine("- " + item.Name);
+                Console.WriteLine("- " + item.Name  );
             }
         }
-
+        //______________________________________________________________________________________________________________________________
       public void Fight(Monster monster)
       {
             Console.WriteLine($"{monster.Name} her for at dræbe dig!!!");
 
             while(Health >  0 && monster.Health > 0)
             {
-                
+
+                ShowHealthBar("Monster", monster.Health, monster.MaxHealth);
+                ShowHealthBar("Player", this.Health, this.MaxHealth);
 
 
                 Console.WriteLine("\nattack / run");
@@ -92,6 +98,7 @@ namespace OOP_console_spil
 
                     if(weapon != null && weapon.Hit())
                     {
+                        Console.Clear();
                         monster.Health -= weapon.Damage;
                         Console.WriteLine($"Du rammer {monster.Name} for {weapon.Damage}");
                     }
@@ -113,14 +120,19 @@ namespace OOP_console_spil
                 }
 
 
-
                 if(monster.Health > 0)
                 {
                     monster.Attack(this);
-                    Console.WriteLine($"Din HP: {Health}");
-                    Console.WriteLine($"{monster.Name} HP: {monster.Health}");
-                    Console.WriteLine();
+                   
+
                 }
+
+                if (Health < MaxHealth * 0.3)
+                {
+                    Console.WriteLine();
+                    Console.WriteLine("               !!!!!LOW HP!!!!!");
+                }
+
             } 
 
 
@@ -149,14 +161,14 @@ namespace OOP_console_spil
             }
 
         }
-
+        //-------------------------------------------------------------------------------------------------------------------------------------------------------------
         public void GiveReward()
         {
             if (BossesKilled == 1)
             {
                 var bow = new Weapon("Bow", 25, true, 15);
                 inventory.Add(bow);
-                Console.WriteLine("Du har modtaget en bue!");
+                Console.WriteLine("Du har modtaget en Bow!");
                 
 
             }
@@ -164,16 +176,16 @@ namespace OOP_console_spil
             {
                 var axe = new Weapon("Axe", 35, false, 999);
                 inventory.Add(axe);
-                Console.WriteLine("Du har modtaget en økse!");
+                Console.WriteLine("Du har modtaget en Axe!");
             }
             else if (BossesKilled == 3)
             {
-                var ultimate = new Weapon("Ultimate Sword", 50, false, 999);
+                var ultimate = new Weapon("Murasame Blade", 50, false, 999);
                 inventory.Add(ultimate);
-                Console.WriteLine("Du har modtaget det ultimative sværd!");
+                Console.WriteLine("Du har modtaget det Murasame Blade!");
             }
         }
-
+        //__________________________________________________________________________________________________________________________________________________________
 
         public void ShowMap()
         {
@@ -191,7 +203,19 @@ namespace OOP_console_spil
 
             Console.WriteLine("=================\n");
         }
+        //--------------------------------------------------------------------------------------------------------------------------------------------------
 
+        public void ShowHealthBar(string name, int current, int max)
+        {
+            int barLength = 20;
+            double percent = (double)current / max;
+            int filled =(int) (percent * barLength);    
 
+            if( filled < 0 ) filled = 0;
+            if ( filled > max ) max = filled;
+            string bar = new string('█', filled) + new string('░', barLength - filled);
+            Console.WriteLine($"{name} HP: [{bar}] {current}/{max}");
+        }
+        //----------------------------------------------------------------------------------------------------------------------------------------------------
     }
 }

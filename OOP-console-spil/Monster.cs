@@ -12,6 +12,9 @@ namespace OOP_console_spil
         public int Health { get; set; }
         public int Damage { get; set; }
 
+        public int MaxHealth { get; set; } = 100;
+
+
         private Random rand = new Random(); 
 
 
@@ -20,6 +23,7 @@ namespace OOP_console_spil
            Name = name;
            Health = health;
            Damage = damage;
+           MaxHealth = health;
 
         }
        
@@ -41,10 +45,10 @@ namespace OOP_console_spil
 
         }
 
-        public  virtual void SpecialAttack(Player player)
-        {
-            Console.WriteLine($"{Name} prøvede et specialangreb, men mislykkedes!");
-        }
+        public  virtual void SpecialAttack(Player player) { }
+        
+            
+        
 
 
         

@@ -14,9 +14,9 @@ namespace OOP_console_spil
 
             Room north = new Room("Velkommen til Cyclones verden! Du befinder dig i øjeblikket i den nordlige skov.\nFor at undslippe skal du dræbe 3 forskellige monstre. Held og lykke! :)");
 
-            Room west = new Room("Hejjj, velkommen til den vestlige skov!");
-            Room east = new Room("Hejjj, velkommen til den eastlige skov!");
-            Room south = new Room("Hejj, velkommen til den sydlig  skov!");
+            Room west = new Room("Hej, velkommen til den vestlige skov!");
+            Room east = new Room("Hej, velkommen til den eastlige skov!");
+            Room south = new Room("Hej, velkommen til den sydlig  skov!");
             Player player = new Player();
 
             player.CurrentRoom = north;
@@ -45,11 +45,11 @@ namespace OOP_console_spil
             while (true)
             {
                 Console.WriteLine("------------------------------------------------------------------------------------------------------------------------");
+               
+                Console.WriteLine("Commands: [Go west], [Go, East], [Go South], [Go north],\n[Inventory], [Attack], [drink potion], [Map]");
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine($"Health: {player.Health}");
                 Console.ResetColor();
-                Console.WriteLine("Commands: [Go west], [Go, East], [Go South], [Go north],\n[Inventory], [Attack], [drink potion], [Map]");
-
 
                 Console.Write("> ");
                 string input = Console.ReadLine().ToLower();
@@ -68,17 +68,7 @@ namespace OOP_console_spil
                     player.ShowInventory();
                 }
                
-                else if (input.StartsWith("attack "))
-                {
-                    Console.Clear();
-                    string weaponName = input.Substring(7);
-                    var weapon = player.inventory.OfType<Weapon>().FirstOrDefault(w => w.Name.ToLower() == weaponName);
-
-                    if (weapon != null && weapon.Hit())
-                    {
-                        Console.WriteLine($"You attack with {weapon.Name}");
-                    }
-                }
+                
 
                 else if (input == "map")
                 {
@@ -103,6 +93,9 @@ namespace OOP_console_spil
                         Console.WriteLine("Du har ikke potion");
                     }
                 }
+
+
+                
 
             }
 
