@@ -32,7 +32,9 @@ namespace OOP_console_spil
         {
             int chance = rand.Next(100);
 
-            if(chance < 30)
+           
+
+            if (chance < 30)
             {
                 SpecialAttack(player);
             } 
