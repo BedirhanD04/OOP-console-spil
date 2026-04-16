@@ -207,7 +207,7 @@ namespace OOP_console_spil
 
         public void ShowMap()// this metod shows map
         {
-            Console.WriteLine("\n=== World MAP ===");
+            Console.WriteLine("=== World MAP ===");
 
 
             string west = CurrentRoom == StartRoom.West ? "[YOU]" : "WEST";

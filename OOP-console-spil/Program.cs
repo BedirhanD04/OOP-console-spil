@@ -38,6 +38,7 @@ namespace OOP_console_spil
             PrintCentered("1) Move");
             PrintCentered("2) Inventory");
             PrintCentered("3) Potion");
+            PrintCentered("4) Map");
             PrintCentered("0) Exit");
             PrintCentered("================================");
             Console.Write("> ");
