@@ -4,15 +4,49 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using static System.Net.Mime.MediaTypeNames;
+using System.IO;
+using System.Threading;
 
 namespace OOP_console_spil
 {
-     class Program
+    class Program
     {
+        static void PrintCentered(string text) //location of menu
+        {
+            int windowWidth = Console.WindowWidth;
+            int spaces = (windowWidth - text.Length) / 2;
+
+            if (spaces < 0) spaces = 0;
+
+            Console.WriteLine(new string(' ', spaces) + text);
+        }
+        //---------------------------------------------------------------------------------------------
+        static void ShowMenu(Player player)//menu
+        {
+            Console.ForegroundColor = ConsoleColor.DarkMagenta;
+            PrintCentered("================================");
+            PrintCentered("CYCLONE RPG");
+            PrintCentered("================================");
+            Console.ForegroundColor = ConsoleColor.Red;
+            PrintCentered($"HP: {player.Health}");
+            Console.ForegroundColor = ConsoleColor.Green;
+            PrintCentered($"Bosses: {player.BossesKilled}/3");
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            PrintCentered($"{player.CurrentRoom.Description}");
+            PrintCentered("================================");
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            PrintCentered("1) Move");
+            PrintCentered("2) Inventory");
+            PrintCentered("3) Potion");
+            PrintCentered("0) Exit");
+            PrintCentered("================================");
+            Console.Write("> ");
+            Console.ResetColor();
+        }
         static void Main(string[] args)
         {
             // Description of rooms
-            Room north = new Room("Velkommen til Cyclones verden! Du befinder dig i øjeblikket i den nordlige skov.\nFor at undslippe skal du dræbe 3 forskellige monstre. Held og lykke! :)");
+            Room north = new Room("                    Velkommen til Cyclones verden! Du befinder dig i øjeblikket i den nordlige skov.\n                    For at undslippe skal du dræbe 3 forskellige monstre. Held og lykke! :)");
 
             Room west = new Room("Hej, velkommen til den vestlige skov!");
             Room east = new Room("Hej, velkommen til den eastlige skov!");
@@ -44,79 +78,67 @@ namespace OOP_console_spil
             Potion potion = new Potion("Health Potion", 30);
             player.inventory.Add(potion);
 
-            // Showing Description of rooms
-            Console.WriteLine(player.CurrentRoom.Description);
-
+           
             //the loop
             while (true)
             {
-                Console.WriteLine("------------------------------------------------------------------------------------------------------------------------");
-                //A small menu that shows commands to player
-                Console.WriteLine("Commands: [Go west], [Go, East], [Go South], [Go north],\n[Inventory], [drink potion], [Map]");
+                ShowMenu(player);//menu
 
-                //shows players health with red color
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine($"Health: {player.Health}");
-                Console.ResetColor();
+                string input = Console.ReadLine();
 
-                //The player enters the input here.
-                Console.Write("> ");
-                //Reads the input
-                string input = Console.ReadLine().ToLower();
-                //Shows map
-                player.ShowMap();
-
-                //This condition allows the player to move between rooms.
-                if (input.StartsWith("go "))
+                switch (input)
                 {
-                    Console.Clear();
-                    string direction = input.Split(' ')[1];
-                    player.Move(direction);
+                    case "1": // MOVE
+
+                        Console.Clear();
+                        Console.Write("Direction (north/south/east/west): ");
+                        player.Move(Console.ReadLine().ToLower());
+                        break;
+                  
+
+                    case "2": // INVENTORY
+
+                        Console.Clear();
+                        player.ShowInventory();
+                        break;
+
+                    case "3": // POTION
+
+                        Console.Clear();
+                        potion = player.inventory.OfType<Potion>().FirstOrDefault();
+                        if (potion != null)
+                        {
+                            player.Health = Math.Min(player.Health + potion.HealAmount, 100);
+                            player.inventory.Remove(potion);
+                            Console.WriteLine("Potion used!");
+                        }
+                        else
+                        {
+                            Console.WriteLine("No potion!");
+                        }
+                        break;
+
+                        case "4"://MAP
+
+                        Console.Clear();
+                        player.ShowMap();
+                        break;
+
+                    case "0":// closes the game
+                        return;
+
+                    default:
+                        Console.Clear();
+                        Console.WriteLine("Invalid option!");
+                        break;
                 }
-                //This condition shows inventory
-                else if (input == "inventory")
-                {
-                    Console.Clear();
-                    player.ShowInventory();
-                }
-
-                //This condition shows world map
-                else if (input == "map")
-                {
-                    Console.Clear();
-                    player.ShowMap();
-                         
-
-                }
-                //This condition makes the player drink the potion.
-                else if (input == "drink potion")
-                {
-                    var foundPotion = player.inventory.OfType<Potion>().FirstOrDefault();
-
-                    if (potion != null)
-                    {
-                        potion.Drink(player);
-                        player.inventory.Remove(foundPotion);
-                    }
-                    //if you dont have any potion
-                    else
-                    {
-                        Console.WriteLine("Du har ikke potion");
-                    }
-                }
-
-
-                
-
             }
 
 
 
         }
 
-       
+
 
     }
-
-    
 }

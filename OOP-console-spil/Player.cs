@@ -6,15 +6,17 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Schema;
+using System.IO;
+using System.Threading;
 
 namespace OOP_console_spil
 {
-     class Player
+    class Player
     {
         //property
         public Room CurrentRoom { get; set; }
 
-        public Room StartRoom { get; set; } 
+        public Room StartRoom { get; set; }
 
         public int Health { get; set; } = 100;
 
@@ -25,7 +27,7 @@ namespace OOP_console_spil
         public Room PreviousRoom { get; set; }
         public List<Item> inventory { get; set; } = new List<Item>();
 
-       
+
 
         //------------------------------------------------------------------------------------------------------------------------------------ 
         public void Move(string direction) //This method allows the player to move between rooms.
@@ -47,13 +49,13 @@ namespace OOP_console_spil
                 Console.WriteLine(CurrentRoom.Description);
             }
 
-                if (nextRoom == null) // If its null
+            if (nextRoom == null) // If its null
             {
                 Console.WriteLine("Du kan ikke gå den vej.");
                 return;
             }
 
-            
+
             if (nextRoom == CurrentRoom.South && BossesKilled < 2) // It prevents the player from going to the third boss without killing the first two.
             {
                 Console.WriteLine("Du skal først besejre VEST- og ØST-bosserne!");
@@ -77,15 +79,15 @@ namespace OOP_console_spil
             Console.WriteLine("=== INVENTORY ===");
             foreach (var item in inventory)
             {
-                Console.WriteLine("- " + item.Name  );
+                Console.WriteLine("- " + item.Name);
             }
         }
         //______________________________________________________________________________________________________________________________
-      public void Fight(Monster monster)//This method controls the fight.
+        public void Fight(Monster monster)//This method controls the fight.
         {
             Console.WriteLine($"{monster.Name} her for at dræbe dig!!!");// Message to Player
 
-            while(Health >  0 && monster.Health > 0)//The loop continues until the monster or the player dead.
+            while (Health > 0 && monster.Health > 0)//The loop continues until the monster or the player dead.
             {
                 //Shows the Monsters and The players hp
                 ShowHealthBar("Monster", monster.Health, monster.MaxHealth);
@@ -98,11 +100,11 @@ namespace OOP_console_spil
 
 
                 //This condition allows the player to attack.
-                if (input == "attack") 
+                if (input == "attack")
                 {
                     Console.WriteLine("Hvad vil du angribe med? ");
 
-                    foreach(var w in inventory.OfType<Weapon>()) //Shows all weapons in inventory
+                    foreach (var w in inventory.OfType<Weapon>()) //Shows all weapons in inventory
                     {
                         Console.WriteLine("- " + w.Name);
                     }
@@ -122,25 +124,25 @@ namespace OOP_console_spil
                     {
                         Console.WriteLine("Ugyldigt våben!");
                     }
-                
-                
+
+
                 }
 
 
-                else if(input == "run")//This condition allows the player to escape the room.
+                else if (input == "run")//This condition allows the player to escape the room.
                 {
                     Console.Clear();
                     Console.WriteLine("Du flygtede!");
 
-                    CurrentRoom = PreviousRoom; 
+                    CurrentRoom = PreviousRoom;
                     return;
                 }
 
 
-                if(monster.Health > 0)//The monster will attack until it dies.
+                if (monster.Health > 0)//The monster will attack until it dies.
                 {
                     monster.Attack(this);
-                   
+
                 }
 
                 if (Health < MaxHealth * 0.3)//Warning if HP drops below 30%
@@ -149,11 +151,11 @@ namespace OOP_console_spil
                     Console.WriteLine("               !!!!!LOW HP!!!!!");
                 }
 
-            } 
+            }
 
 
-            
-        if (Health > 0)//Message for killing the monster
+
+            if (Health > 0)//Message for killing the monster
             {
                 Console.Clear();
                 Console.WriteLine($"Du besejrede {monster.Name}!");
@@ -185,7 +187,7 @@ namespace OOP_console_spil
                 var bow = new Weapon("Bow", 25, true, 15);
                 inventory.Add(bow);
                 Console.WriteLine("Du har modtaget en Bow!");
-                
+
 
             }
             else if (BossesKilled == 2)//reward when the second boss is killed
@@ -225,10 +227,10 @@ namespace OOP_console_spil
         {
             int barLength = 20;
             double percent = (double)current / max;
-            int filled =(int) (percent * barLength);    
+            int filled = (int)(percent * barLength);
 
-            if( filled < 0 ) filled = 0;
-            if ( filled > max ) max = filled;
+            if (filled < 0) filled = 0;
+            if (filled > max) max = filled;
             string bar = new string('█', filled) + new string('░', barLength - filled);
             Console.WriteLine($"{name} HP: [{bar}] {current}/{max}");
         }
@@ -239,7 +241,7 @@ namespace OOP_console_spil
             Random random = new Random();
             int roll = random.Next(100);
 
-            if(roll < 50)
+            if (roll < 50)
             {
                 var potion = new Potion("Health Potion", 30);//There's a 50% chance it will give a potion.
                 inventory.Add(potion);
@@ -253,7 +255,6 @@ namespace OOP_console_spil
                 Console.WriteLine("Du fandt et Trance Sword!");
             }
         }
-
     }
 
 
