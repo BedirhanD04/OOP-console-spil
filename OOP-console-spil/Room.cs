@@ -20,7 +20,6 @@ namespace OOP_console_spil
         public Room East { get; set; }
         public Room West { get; set; }
 
-        public List<Item> Items { get; set; } = new List<Item>();
 
         public Monster Monster { get; set; }
 

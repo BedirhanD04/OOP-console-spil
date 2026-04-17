@@ -11,13 +11,11 @@ namespace OOP_console_spil
      class Item
     {
         public string Name { get; set; }
-        
 
         public Item(string name) 
         {
             Name = name;
         }
-
         
     }
 }

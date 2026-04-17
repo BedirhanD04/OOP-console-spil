@@ -28,13 +28,19 @@ namespace OOP_console_spil
             PrintCentered("CYCLONE RPG");
             PrintCentered("================================");
             Console.ForegroundColor = ConsoleColor.Red;
+            PrintCentered("================================");
             PrintCentered($"HP: {player.Health}");
+            PrintCentered("================================");
             Console.ForegroundColor = ConsoleColor.Green;
+            PrintCentered("================================");
             PrintCentered($"Bosses: {player.BossesKilled}/3");
+            PrintCentered("================================");
             Console.ForegroundColor = ConsoleColor.Cyan;
+            PrintCentered("================================");
             PrintCentered($"{player.CurrentRoom.Description}");
             PrintCentered("================================");
             Console.ForegroundColor = ConsoleColor.Yellow;
+            PrintCentered("================================");
             PrintCentered("1) Move");
             PrintCentered("2) Inventory");
             PrintCentered("3) Potion");
@@ -47,7 +53,7 @@ namespace OOP_console_spil
         static void Main(string[] args)
         {
             // Description of rooms
-            Room north = new Room("                    Velkommen til Cyclones verden! Du befinder dig i øjeblikket i den nordlige skov.\n                    For at undslippe skal du dræbe 3 forskellige monstre. Held og lykke! :)");
+            Room north = new Room("                     Velkommen til Cyclones verden! Du befinder dig i øjeblikket i den nordlige skov.\n                     For at undslippe skal du dræbe 3 forskellige monstre. Held og lykke! :)");
 
             Room west = new Room("Hej, velkommen til den vestlige skov!");
             Room east = new Room("Hej, velkommen til den eastlige skov!");
@@ -92,7 +98,7 @@ namespace OOP_console_spil
                     case "1": // MOVE
 
                         Console.Clear();
-                        Console.Write("Direction (north/south/east/west): ");
+                        Console.Write("Retning (north/south/east/west): ");
                         player.Move(Console.ReadLine().ToLower());
                         break;
                   
@@ -111,11 +117,11 @@ namespace OOP_console_spil
                         {
                             player.Health = Math.Min(player.Health + potion.HealAmount, 100);
                             player.inventory.Remove(potion);
-                            Console.WriteLine("Potion used!");
+                            Console.WriteLine("Potion Brugt!");
                         }
                         else
                         {
-                            Console.WriteLine("No potion!");
+                            Console.WriteLine("Ingen potion!");
                         }
                         break;
 
@@ -125,12 +131,14 @@ namespace OOP_console_spil
                         player.ShowMap();
                         break;
 
+                    
+
                     case "0":// closes the game
                         return;
 
                     default:
                         Console.Clear();
-                        Console.WriteLine("Invalid option!");
+                        Console.WriteLine("Ugyldig mulighed!");
                         break;
                 }
             }

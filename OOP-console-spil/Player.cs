@@ -15,8 +15,8 @@ namespace OOP_console_spil
     {
         //property
         public Room CurrentRoom { get; set; }
-
         public Room StartRoom { get; set; }
+
 
         public int Health { get; set; } = 100;
 
@@ -63,10 +63,10 @@ namespace OOP_console_spil
             }
 
 
-
             if (CurrentRoom.Monster != null) //It starts a fight with the boss in the room.
             {
-                Fight(CurrentRoom.Monster);
+                ControlFight cf = new ControlFight();
+                cf.Fight(this, CurrentRoom.Monster);
                 if (CurrentRoom.Monster != null && CurrentRoom.Monster.Health <= 0)
                 {
                     CurrentRoom.Monster = null;
@@ -74,111 +74,25 @@ namespace OOP_console_spil
             }
         }
         //----------------------------------------------------------------------------------------------------------------------------------------------
-        public void ShowInventory()//This metos shows inventory
+        public void ShowMap()// this metod shows map
         {
-            Console.WriteLine("=== INVENTORY ===");
-            foreach (var item in inventory)
-            {
-                Console.WriteLine("- " + item.Name);
-            }
+
+
+            Console.ForegroundColor = ConsoleColor.DarkGray;
+            Console.WriteLine("===== World MAP =====");
+
+            string west = CurrentRoom == StartRoom.West ? "[YOU]" : "WEST";
+            string east = CurrentRoom == StartRoom.East ? "[YOU]" : "EAST";
+            string south = CurrentRoom == StartRoom.South ? "[YOU]" : "SOUTH";
+            string north = CurrentRoom == StartRoom ? "[YOU]" : "NORTH";
+
+            Console.WriteLine($"        {north}");
+            Console.WriteLine($"  {west}         {east}");
+            Console.WriteLine($"        {south}");
+
+            Console.WriteLine("=====================\n");
         }
-        //______________________________________________________________________________________________________________________________
-        public void Fight(Monster monster)//This method controls the fight.
-        {
-            Console.WriteLine($"{monster.Name} her for at dræbe dig!!!");// Message to Player
 
-            while (Health > 0 && monster.Health > 0)//The loop continues until the monster or the player dead.
-            {
-                //Shows the Monsters and The players hp
-                ShowHealthBar("Monster", monster.Health, monster.MaxHealth);
-                ShowHealthBar("Player", this.Health, this.MaxHealth);
-
-                //write input
-                Console.WriteLine("\nattack / run");
-                //read input
-                string input = Console.ReadLine().ToLower();
-
-
-                //This condition allows the player to attack.
-                if (input == "attack")
-                {
-                    Console.WriteLine("Hvad vil du angribe med? ");
-
-                    foreach (var w in inventory.OfType<Weapon>()) //Shows all weapons in inventory
-                    {
-                        Console.WriteLine("- " + w.Name);
-                    }
-
-                    string weaponChoise = Console.ReadLine().ToLower();   //Read weapon Choise
-
-                    var weapon = inventory.OfType<Weapon>().FirstOrDefault(w => w.Name.ToLower() == weaponChoise);  //Find the first weapon in the inventory whose name matches the user's name.
-
-                    if (weapon != null && weapon.Hit())//Checking if there is a weapon and if it is working.
-                    {
-                        Console.Clear();
-                        monster.Health -= weapon.Damage;
-                        Console.WriteLine($"Du rammer {monster.Name} for {weapon.Damage}");
-                    }
-
-                    else // if not
-                    {
-                        Console.WriteLine("Ugyldigt våben!");
-                    }
-
-
-                }
-
-
-                else if (input == "run")//This condition allows the player to escape the room.
-                {
-                    Console.Clear();
-                    Console.WriteLine("Du flygtede!");
-
-                    CurrentRoom = PreviousRoom;
-                    return;
-                }
-
-
-                if (monster.Health > 0)//The monster will attack until it dies.
-                {
-                    monster.Attack(this);
-
-                }
-
-                if (Health < MaxHealth * 0.3)//Warning if HP drops below 30%
-                {
-                    Console.WriteLine();
-                    Console.WriteLine("               !!!!!LOW HP!!!!!");
-                }
-
-            }
-
-
-
-            if (Health > 0)//Message for killing the monster
-            {
-                Console.Clear();
-                Console.WriteLine($"Du besejrede {monster.Name}!");
-                BossesKilled++; //Count the monster you killed         
-                GiveReward(); //gives you a reward for killing the monster.
-                DropLoot(); // Drops random item
-
-                if (BossesKilled == 3)//You'll see this message when you've killed all the bosses.
-                {
-                    Console.WriteLine("Tillykke! Du besejrede alle bosser!!");
-                    Environment.Exit(0);//It closes the program immediately and stops working.
-                }
-            }
-
-
-
-            else
-            {
-                Console.WriteLine("Du er død...");//message when you are dead
-                Environment.Exit(0);//It closes the program immediately and stops working.
-            }
-
-        }
         //-------------------------------------------------------------------------------------------------------------------------------------------------------------
         public void GiveReward()//this method gives reward to player
         {
@@ -187,8 +101,6 @@ namespace OOP_console_spil
                 var bow = new Weapon("Bow", 25, true, 15);
                 inventory.Add(bow);
                 Console.WriteLine("Du har modtaget en Bow!");
-
-
             }
             else if (BossesKilled == 2)//reward when the second boss is killed
             {
@@ -203,37 +115,17 @@ namespace OOP_console_spil
                 Console.WriteLine("Du har modtaget det Murasame Blade!");
             }
         }
-        //__________________________________________________________________________________________________________________________________________________________
-
-        public void ShowMap()// this metod shows map
-        {
-            Console.WriteLine("=== World MAP ===");
-
-
-            string west = CurrentRoom == StartRoom.West ? "[YOU]" : "WEST";
-            string east = CurrentRoom == StartRoom.East ? "[YOU]" : "EAST";
-            string south = CurrentRoom == StartRoom.South ? "[YOU]" : "SOUTH";
-            string north = CurrentRoom == StartRoom ? "[YOU]" : "NORTH";
-
-            Console.WriteLine($"        {north}");
-            Console.WriteLine($"   {west}       {east}");
-            Console.WriteLine($"        {south}");
-
-            Console.WriteLine("=================\n");
-        }
+       
         //--------------------------------------------------------------------------------------------------------------------------------------------------
-
-        public void ShowHealthBar(string name, int current, int max)// shows the HealthBar
+        public void ShowInventory()//This metos shows inventory
         {
-            int barLength = 20;
-            double percent = (double)current / max;
-            int filled = (int)(percent * barLength);
-
-            if (filled < 0) filled = 0;
-            if (filled > max) max = filled;
-            string bar = new string('█', filled) + new string('░', barLength - filled);
-            Console.WriteLine($"{name} HP: [{bar}] {current}/{max}");
+            Console.WriteLine("=== INVENTORY ===");
+            foreach (var item in inventory)
+            {
+                Console.WriteLine("- " + item.Name);
+            }
         }
+
 
         //----------------------------------------------------------------------------------------------------------------------------------------------------
         public void DropLoot() // drops random loot (gift)
@@ -250,7 +142,7 @@ namespace OOP_console_spil
 
             else
             {
-                var weapon = new Weapon("Trance Sword", 40, false, 15);//There's a 50% chance it will give a sword.
+                var weapon = new Weapon("Trance Sword", 40, false, 999);//There's a 50% chance it will give a sword.
                 inventory.Add(weapon);
                 Console.WriteLine("Du fandt et Trance Sword!");
             }

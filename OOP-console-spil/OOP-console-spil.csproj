@@ -43,6 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ControlFight.cs" />
     <Compile Include="Drago.cs" />
     <Compile Include="Item.cs" />
     <Compile Include="Monster.cs" />
@@ -53,6 +54,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Room.cs" />
     <Compile Include="Skyress.cs" />
+    <Compile Include="HealthBar.cs" />
     <Compile Include="Weapon.cs" />
   </ItemGroup>
   <ItemGroup>
