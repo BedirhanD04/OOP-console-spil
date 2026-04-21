@@ -59,12 +59,36 @@ namespace OOP_console_spil
                 }
 
 
-                else if (input == "run")//This condition allows the player to escape the room.
+                else if (input == "run")
                 {
                     Console.Clear();
                     Console.WriteLine("Du flygtede!");
 
-                    player.CurrentRoom = player.PreviousRoom;
+                    Random rand = new Random();
+                    int chance = rand.Next(100);
+                    Room escapeRoom = player.PreviousRoom;
+
+                    if (chance < 40)
+                    {
+                        // Are there any other monsters in the room you escaped from?
+                        if (escapeRoom.Monster == null)
+                        {
+                            player.CurrentRoom.Monster = null;
+                            escapeRoom.Monster = monster;
+                            Console.WriteLine($"!!! {monster.Name} Følger dig!!!!!!");
+                        }
+                        else
+                        {
+                            //There's already a monster in the room, it can't keep up.
+                            Console.WriteLine($"{monster.Name} ville følge dig, men vejen var blokeret!");
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine($"{monster.Name} fulgte dig ikke, så du er i sikkerhed for nu.");
+                    }
+
+                    player.CurrentRoom = escapeRoom;
                     return;
                 }
 
@@ -89,6 +113,7 @@ namespace OOP_console_spil
             {
                 Console.Clear();
                 Console.WriteLine($"Du besejrede {monster.Name}!");
+                monster.IsDead = true;
                 player.BossesKilled++; //Count the monster you killed         
                 player.GiveReward(); //gives you a reward for killing the monster.
                 player.DropLoot(); // Drops random item

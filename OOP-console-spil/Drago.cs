@@ -15,8 +15,9 @@ namespace OOP_console_spil
             int damage2 = Damage + 15;
             player.Health -= damage2;
 
-            Console.WriteLine("Drago uses BURNING DRAGON!");
-            Console.WriteLine($"You take {damage2} damage!");
+           
+            Console.WriteLine("Drago bruger BURNING DRAGON!");
+            Console.WriteLine($"Du tager {damage2} skade!");
         }
     }
 }

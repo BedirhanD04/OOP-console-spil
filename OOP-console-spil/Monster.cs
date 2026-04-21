@@ -16,6 +16,8 @@ namespace OOP_console_spil
 
         public int MaxHealth { get; set; } = 100;
 
+        public bool IsDead { get; set; } = false;
+
 
         private Random rand = new Random(); 
 

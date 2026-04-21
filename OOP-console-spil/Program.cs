@@ -45,6 +45,8 @@ namespace OOP_console_spil
             PrintCentered("2) Inventory");
             PrintCentered("3) Potion");
             PrintCentered("4) Map");
+            PrintCentered("5) Gem spil");   
+            PrintCentered("6) Load spil");
             PrintCentered("0) Exit");
             PrintCentered("================================");
             Console.Write("> ");
@@ -109,29 +111,32 @@ namespace OOP_console_spil
                         player.ShowInventory();
                         break;
 
-                    case "3": // POTION
-
+                    case "3":
                         Console.Clear();
-                        potion = player.inventory.OfType<Potion>().FirstOrDefault();
-                        if (potion != null)
-                        {
-                            player.Health = Math.Min(player.Health + potion.HealAmount, 100);
-                            player.inventory.Remove(potion);
-                            Console.WriteLine("Potion Brugt!");
-                        }
+                        Potion potionn = player.inventory.OfType<Potion>().FirstOrDefault();
+                        if (potionn != null)
+                            potionn.Drink(player); // tek satır, temiz
                         else
-                        {
-                            Console.WriteLine("Ingen potion!");
-                        }
+                            Console.WriteLine("du har ingen potion!");
                         break;
 
-                        case "4"://MAP
+                    case "4"://MAP
 
                         Console.Clear();
                         player.ShowMap();
                         break;
 
-                    
+                    case "5":
+                        Console.Clear();
+                        SaveSystem.Save(player, west, east, south);
+                        break;
+
+                    case "6":
+                        Console.Clear();
+                        SaveSystem.Load(player, west, east, south);
+                        break;
+
+
 
                     case "0":// closes the game
                         return;

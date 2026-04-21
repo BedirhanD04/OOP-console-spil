@@ -27,7 +27,7 @@ namespace OOP_console_spil
         {
             if(Usesleft <= 0)
             {
-                Console.WriteLine("No uses left!!");
+                Console.WriteLine("Ingen flere angreb tilbage!");
                 return false;
             }
 

@@ -30,11 +30,11 @@ namespace OOP_console_spil
 
 
         //------------------------------------------------------------------------------------------------------------------------------------ 
-        public void Move(string direction) //This method allows the player to move between rooms.
+        public void Move(string direction)
         {
             Room nextRoom = null;
 
-            switch (direction)//Rooms
+            switch (direction)
             {
                 case "north": nextRoom = CurrentRoom.North; break;
                 case "south": nextRoom = CurrentRoom.South; break;
@@ -42,35 +42,29 @@ namespace OOP_console_spil
                 case "west": nextRoom = CurrentRoom.West; break;
             }
 
-            if (nextRoom != null) //If its not null
-            {
-                PreviousRoom = CurrentRoom;
-                CurrentRoom = nextRoom;
-                Console.WriteLine(CurrentRoom.Description);
-            }
-
-            if (nextRoom == null) // If its null
+            if (nextRoom == null)
             {
                 Console.WriteLine("Du kan ikke gå den vej.");
                 return;
             }
 
-
-            if (nextRoom == CurrentRoom.South && BossesKilled < 2) // It prevents the player from going to the third boss without killing the first two.
+            if (nextRoom == StartRoom.South && BossesKilled < 2)
             {
                 Console.WriteLine("Du skal først besejre VEST- og ØST-bosserne!");
                 return;
             }
 
+            PreviousRoom = CurrentRoom;
+            CurrentRoom = nextRoom;
+            Console.WriteLine(CurrentRoom.Description);
 
-            if (CurrentRoom.Monster != null) //It starts a fight with the boss in the room.
+            if (CurrentRoom.Monster != null)
             {
                 ControlFight cf = new ControlFight();
                 cf.Fight(this, CurrentRoom.Monster);
+
                 if (CurrentRoom.Monster != null && CurrentRoom.Monster.Health <= 0)
-                {
                     CurrentRoom.Monster = null;
-                }
             }
         }
         //----------------------------------------------------------------------------------------------------------------------------------------------
@@ -117,7 +111,7 @@ namespace OOP_console_spil
         }
        
         //--------------------------------------------------------------------------------------------------------------------------------------------------
-        public void ShowInventory()//This metos shows inventory
+        public void ShowInventory()//This method shows inventory
         {
             Console.WriteLine("=== INVENTORY ===");
             foreach (var item in inventory)
@@ -125,7 +119,6 @@ namespace OOP_console_spil
                 Console.WriteLine("- " + item.Name);
             }
         }
-
 
         //----------------------------------------------------------------------------------------------------------------------------------------------------
         public void DropLoot() // drops random loot (gift)
